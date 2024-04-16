@@ -17,9 +17,23 @@ content.appendChild(myIcon);
 const table = HashMap();
 
 console.log(table.getBuckets());
-table.set("Carlos", "Testing value");
+table.set("Carlot", "Testing value");
 
 console.log(table.getBuckets());
+
+table.set("Carlot", "rewriting data");
+
+console.log(table.getBuckets());
+console.log(table.get("Carlns"));
+table.set("Carlns", "Bruh");
+console.log(table.getBuckets());
+
+table.set("Carlot", "Testing value1");
+console.log(table.getBuckets());
+console.log(table.get("Carlot"));
+console.log(table.get("Carl"));
+console.log(table.get("Carlns"));
+
 // function component() {
 //   const element = document.createElement("div");
 
