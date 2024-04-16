@@ -1,11 +1,14 @@
+import Linked_list from "./linked-list.js";
+
 function HashMap() {
-  const buckets = new Array(16).fill(null);
-  const loadThreshold = 0.75;
+  let buckets = new Array(16).fill(null);
 
   function getLoadFactor(buckets) {
-    buckets.reduce((filled, bucket) => {
-      return bucket != null ? filled + 1 : filled;
-    }, 0) / buckets.length;
+    return (
+      buckets.reduce((filled, bucket) => {
+        return bucket != null ? filled + 1 : filled;
+      }, 0) / buckets.length
+    );
   }
 
   function expandBuckets(buckets) {
@@ -25,22 +28,77 @@ function HashMap() {
   }
 
   function set(key, value) {
+    const loadThreshold = 0.75;
     let loadFactor = getLoadFactor(buckets);
+
     if (loadFactor >= loadThreshold) {
       buckets = expandBuckets(buckets);
     }
-    let bucketIndex = hash(key);
+    let index = hash(key);
 
-    if (buckets[bucketIndex] === null) {
-      buckets[bucketIndex] = value;
+    if (index < 0 || index >= buckets.length) {
+      throw new Error("Trying to access index out of bound");
+    }
+
+    if (buckets[index] === null) {
+      let list = new Linked_list();
+      list.append({ key, value }, null);
+      buckets[index] = list;
+    } else {
+      if (buckets[index].contains(key)) {
+        console.log(
+          "this key already exist, rewriting values data for this key"
+        );
+
+        let listIndex = buckets[index].find(key);
+
+        buckets[index].removeAt(listIndex);
+
+        buckets[index].insertAt({ key, value }, listIndex);
+
+        console.log("string", buckets[index].toString());
+        return;
+      } else {
+        buckets[index].prepend({ key, value });
+        return;
+      }
     }
   }
 
-  function getBuckets() {
-    return buckets;
+  function get(key) {
+    let index = hash(key);
+    let listIndex = buckets[index]?.find(key);
+    // console.log("get");
+    // console.log("listIndex ", listIndex);
+    if (listIndex !== undefined && listIndex !== null) {
+      let node = buckets[index].at(listIndex);
+
+      return node.value.value;
+    }
+    return null;
   }
 
-  return { set, getBuckets };
+  function getBuckets() {
+    return buckets.map((bucket) => {
+      if (bucket === null) {
+        return bucket;
+      } else {
+        return bucket.toString();
+      }
+    });
+  }
+
+  // function getBuckets() {
+  //   return buckets;
+  // }
+
+  return { set, get, getBuckets };
 }
 
 export default HashMap;
+
+// create a new linked list if the index is null
+// update the value of an existing key(node)
+// if not add a new node to the linked list
+// modiffied toString() to work with map
+//
