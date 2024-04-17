@@ -33,6 +33,36 @@ console.log(table.getBuckets());
 console.log(table.get("Carlot"));
 console.log(table.get("Carl"));
 console.log(table.get("Carlns"));
+// console.log(table.has("Carlot"));
+// console.log(table.remove("Carlot"));
+// console.log(table.has("Carlot"));
+// console.log(table.remove("Carlns"));
+console.log(table.getBuckets());
+console.log(table.length());
+table.set("carl", "yayayaay");
+table.set("stephanie", "rip");
+table.set("amber", "gym");
+table.set("hannah", "fun");
+table.set("monique", "retail?");
+table.set("monica", "???");
+table.set("kim", "competes");
+table.set("sydney", "nurse");
+table.set("lily", "church");
+table.set("andrew", "retired");
+table.set("bryan", "engaged");
+table.set("noahhhj", "coach");
+table.set("aaron", "menace");
+table.set("ki", "abridged");
+
+console.log(table.getBuckets());
+console.log(table.length());
+
+console.log(table.keys());
+console.log(table.values());
+console.log(table.entries());
+// table.clear();
+// console.log(table.getBuckets());
+// console.log(table.length());
 
 // function component() {
 //   const element = document.createElement("div");

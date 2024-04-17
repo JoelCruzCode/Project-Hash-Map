@@ -12,6 +12,7 @@ function HashMap() {
   }
 
   function expandBuckets(buckets) {
+    console.log("expanding");
     return buckets.concat(new Array(buckets.length).fill(null));
   }
 
@@ -88,17 +89,116 @@ function HashMap() {
     });
   }
 
-  // function getBuckets() {
-  //   return buckets;
-  // }
+  function has(key) {
+    let index = hash(key);
+    if (buckets[index] === null) return false;
+    return buckets[index].contains(key);
+  }
 
-  return { set, get, getBuckets };
+  function remove(key) {
+    let index = hash(key);
+    if (buckets[index] === null) return false;
+    let listIndex = buckets[index].find(key);
+    if (listIndex === null) return false;
+    buckets[index].removeAt(listIndex);
+    return true;
+  }
+
+  function clear() {
+    buckets = new Array(16).fill(null);
+  }
+
+  function keysImperative() {
+    let array = [];
+    buckets.forEach((bucket) => {
+      if (bucket !== null) {
+        let counter = bucket.getSize();
+        let head = bucket.getHead();
+
+        for (let i = 0; i < counter; i++) {
+          array.push(head.value.key);
+          head = head.next;
+        }
+      }
+    });
+    return array;
+  }
+
+  function keys() {
+    return buckets.reduce((array, bucket) => {
+      if (bucket !== null) {
+        const counter = bucket.getSize();
+        let head = bucket.getHead();
+
+        for (let i = 0; i < counter; i++) {
+          array.push(head.value.key);
+          head = head.next;
+        }
+      }
+      return array;
+    }, []);
+  }
+
+  function values() {
+    return buckets.reduce((array, bucket) => {
+      if (bucket !== null) {
+        const counter = bucket.getSize();
+        let head = bucket.getHead();
+
+        for (let i = 0; i < counter; i++) {
+          array.push(head.value.value);
+          head = head.next;
+        }
+      }
+      return array;
+    }, []);
+  }
+
+  function entries() {
+    return buckets.reduce((array, bucket) => {
+      if (bucket !== null) {
+        const counter = bucket.getSize();
+        let head = bucket.getHead();
+
+        for (let i = 0; i < counter; i++) {
+          array.push([head.value.key, head.value.value]);
+          head = head.next;
+        }
+      }
+      return array;
+    }, []);
+  }
+
+  function length() {
+    return buckets.reduce((filled, bucket) => {
+      return bucket !== null ? filled + bucket.getSize() : filled;
+    }, 0);
+  }
+  return {
+    set,
+    get,
+    has,
+    remove,
+    clear,
+    keys,
+    values,
+    entries,
+    length,
+    getBuckets,
+  };
 }
 
 export default HashMap;
 
-// create a new linked list if the index is null
-// update the value of an existing key(node)
-// if not add a new node to the linked list
-// modiffied toString() to work with map
-//
+// two ways I can think of  creating keys :
+// 1.) use getBuckets and use strings to make keys
+// 2.) for Each / map to create new array...
+
+// 2) issues...
+// How do i traverse my list since its technically all one item with pointers to the next
+// I can use getsize to get a counter
+// insert pointer as  long as counter is  <= to size
+
+// bucket.map now a function: likely due being a reference to an object ?
+
+// get head ? or  get size first if size > 0  gethead or use "at" to initiate traversal
